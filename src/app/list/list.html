@@ -1,0 +1,6 @@
+<cdk-virtual-scroll-viewport itemSize="50" class="list-viewport">
+    <div *cdkVirtualFor="let item of items; templateCacheSize: 0" class="list-item">
+      {{item}}
+    </div>
+</cdk-virtual-scroll-viewport>
+  
