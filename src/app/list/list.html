@@ -1,6 +1,14 @@
-<cdk-virtual-scroll-viewport itemSize="50" class="list-viewport">
-    <div *cdkVirtualFor="let item of items; templateCacheSize: 0" class="list-item">
-      {{item}}
-    </div>
+<cdk-virtual-scroll-viewport
+  class="list-viewport"
+  minBufferPx="300"
+  maxBufferPx="500"
+  itemSize="30"
+  overlayScrollbars
+  [options]="overlayOptions"
+  #osTarget
+>
+  <div *cdkVirtualFor="let item of items; trackBy: trackById" class="list-item">
+    {{item.text}}
+  </div>
 </cdk-virtual-scroll-viewport>
   

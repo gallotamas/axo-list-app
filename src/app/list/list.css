@@ -1,9 +1,9 @@
 .list-viewport {
     height: 200px;
-    width: 200px;
+    width: 500px;
     border: 1px solid black;
 }
   
 .list-item {
-    height: 50px;
+    min-height: 30px;
 }
