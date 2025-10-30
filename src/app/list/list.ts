@@ -9,13 +9,14 @@ import {
 import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { OverlayScrollbarsDirective, OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import type { PartialOptions } from 'overlayscrollbars';
+import { CdkCompressedFixedSizeVirtualScroll } from './compressed-fixed-size-virtual-scroll';
 
 @Component({
   selector: 'axo-list',
   templateUrl: './list.html',
   styleUrl: './list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ScrollingModule, OverlayscrollbarsModule],
+  imports: [CdkCompressedFixedSizeVirtualScroll, ScrollingModule, OverlayscrollbarsModule],
 })
 export class List implements AfterViewInit, OnDestroy {
   @ViewChild('osTarget', { read: ElementRef })
@@ -35,7 +36,7 @@ export class List implements AfterViewInit, OnDestroy {
   };
 
   items = Array.from({length: 1000000}).map((_, i) => {
-    const lengthVariant = i % 5;
+    const lengthVariant = i % 2;
     let text;
     switch (lengthVariant) {
       case 0:
@@ -44,12 +45,12 @@ export class List implements AfterViewInit, OnDestroy {
       case 1:
         text = `Item #${i} - This is a medium length item with some additional text to make it longer`;
         break;
-      case 2:
-        text = `Item #${i} - This is a very long item with lots of text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
-        break;
-      case 3:
-        text = `Item #${i} - Extra long content here! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`;
-        break;
+      // case 2:
+      //   text = `Item #${i} - This is a very long item with lots of text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
+      //   break;
+      // case 3:
+      //   text = `Item #${i} - Extra long content here! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`;
+      //   break;
       default:
         text = `Item #${i}`;
     }
