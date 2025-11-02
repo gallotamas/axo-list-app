@@ -1,12 +1,29 @@
-<cdk-virtual-scroll-viewport
+<!-- <cdk-virtual-scroll-viewport
   class="list-viewport"
   newItemSize="50"
   overlayScrollbars
-  [options]="overlayOptions"
+  [options]="overlayScrollbarsOptions"
   #osTarget
 >
   <div *cdkVirtualFor="let item of items; trackBy: trackById" class="list-item">
     {{item.text}}
   </div>
-</cdk-virtual-scroll-viewport>
-  
+</cdk-virtual-scroll-viewport> -->
+
+<div class="list-container">
+  <cdk-virtual-scroll-viewport
+    class="list-viewport"
+    [variableItemHeights]="itemHeights()"
+    [minBufferPx]="500"
+    [maxBufferPx]="700"
+    overlayScrollbars
+    [options]="overlayScrollbarsOptions"
+    #osTarget
+  >
+    <div
+      *cdkVirtualFor="let item of items; trackBy: trackById"
+      class="list-item"
+      [style.height.px]="itemHeights()[item.id].height"
+    >{{ item.text }}</div>
+  </cdk-virtual-scroll-viewport>
+</div>

@@ -1,10 +1,31 @@
+.list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 16px;
+}
+
 .list-viewport {
-    height: 200px;
-    width: 500px;
+    height: 600px;
+    width: 800px;
     border: 1px solid black;
 }
   
 .list-item {
-    height: 50px;
-    border-bottom: 1px dotted black;
+    min-height: 35px;
+    border-bottom: 1px dotted #ccc;
+    padding: 8px 16px;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    transition: background-color 0.2s;
+    font-family: Monaco, Consolas, "Courier New", monospace;
+    font-size: 13px;
+    line-height: 18px;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.list-item:hover {
+    background-color: rgba(0, 123, 255, 0.05);
 }
