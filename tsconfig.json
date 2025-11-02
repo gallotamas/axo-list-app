@@ -18,6 +18,9 @@
       "@/common": [
         "./src/app/common/"
       ],
+      "@/data": [
+        "./src/app/data/"
+      ],
       "@/types": [
         "./src/app/types/"
       ],

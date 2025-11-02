@@ -8,24 +8,21 @@
 .list-viewport {
     height: 600px;
     width: 800px;
-    border: 1px solid black;
+    border: 1px solid var(--mat-sys-outline);
 }
   
 .list-item {
     min-height: 35px;
-    border-bottom: 1px dotted #ccc;
+    border-bottom: 1px dotted var(--mat-sys-outline);
     padding: 8px 16px;
     display: flex;
     box-sizing: border-box;
-    align-items: center;
     transition: background-color 0.2s;
     font-family: Monaco, Consolas, "Courier New", monospace;
     font-size: 13px;
     line-height: 18px;
-    white-space: pre-wrap;
-    word-break: break-all;
 }
 
 .list-item:hover {
-    background-color: rgba(0, 123, 255, 0.05);
+    background-color: var(--mat-sys-secondary-container);
 }

@@ -20,10 +20,10 @@
     [options]="overlayScrollbarsOptions"
     #osTarget
   >
-    <div
-      *cdkVirtualFor="let item of items; trackBy: trackById"
-      class="list-item"
-      [style.height.px]="itemHeights()[item.id].height"
-    >{{ item.text }}</div>
+      <axo-list-item
+        class="list-item"
+        [style.height.px]="itemHeights()[item.id].height"
+        *cdkVirtualFor="let item of items; trackBy: trackById"
+        [log]="item" />
   </cdk-virtual-scroll-viewport>
 </div>
