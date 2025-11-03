@@ -5,7 +5,7 @@ import { LogEntryWithId } from '@/data';
 @Component({
   selector: 'axo-list-item',
   templateUrl: './list-item.html',
-  styleUrl: './list-item.css',
+  styleUrl: './list-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [DatePipe],
