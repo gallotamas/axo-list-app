@@ -22,7 +22,7 @@ describe('ListItem', () => {
       id: 1,
       ...LOG_DATA[0],
     };
-    component.log = mockLog;
+    fixture.componentRef.setInput('log', mockLog);
 
     fixture.detectChanges();
   });

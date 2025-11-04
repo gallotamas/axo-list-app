@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { LogEntryWithId } from '@/data';
 import { GAP, INDEX_COLUMN_WIDTH, TIMESTAMP_COLUMN_WIDTH } from '../common/constants';
@@ -19,9 +19,8 @@ import { GAP, INDEX_COLUMN_WIDTH, TIMESTAMP_COLUMN_WIDTH } from '../common/const
   `,
   styleUrl: './list-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [DatePipe],
 })
 export class ListItem {
-  @Input() log!: LogEntryWithId;
+  log = input.required<LogEntryWithId>();
 }
