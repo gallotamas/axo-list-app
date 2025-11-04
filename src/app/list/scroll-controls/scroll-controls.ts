@@ -29,7 +29,8 @@ export class ScrollControls {
     });
   }
 
-  onScrollToRow(): void {
+  onScrollToRow(event: SubmitEvent): void {
+    event.preventDefault();
     if (this.scrollToRowControl.valid) {
       this.scrollToRowClicked.emit(this.scrollToRowControl.value);
     }

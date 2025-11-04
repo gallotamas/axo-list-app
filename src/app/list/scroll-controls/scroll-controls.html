@@ -1,4 +1,4 @@
-<form class="scroll-controls" (ngSubmit)="onScrollToRow()">
+<form class="scroll-controls" (submit)="onScrollToRow($event)">
   <mat-form-field class="row-id-form-field" appearance="outline" [subscriptSizing]="scrollToRowControl.invalid ? 'fixed' : 'dynamic'">
     <mat-label>Row ID</mat-label>
     <input matInput type="number" [formControl]="scrollToRowControl" placeholder="Enter row ID" />
