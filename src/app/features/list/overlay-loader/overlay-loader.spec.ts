@@ -16,12 +16,11 @@ describe('OverlayLoader', () => {
 
     fixture = TestBed.createComponent(OverlayLoader);
     component = fixture.componentInstance;
-    
-    // Set required inputs
+
     const mockElementRef = new ElementRef(document.createElement('div'));
     fixture.componentRef.setInput('target', mockElementRef);
     fixture.componentRef.setInput('isVisible', false);
-    
+
     fixture.detectChanges();
   });
 

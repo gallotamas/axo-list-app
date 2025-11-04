@@ -15,7 +15,7 @@ export class ScrollControls {
   maxRowId = input<number>(0);
   scrollToRowClicked = output<number>();
 
-  protected scrollToRowControl = new FormControl<number>(0, { nonNullable: true });
+  scrollToRowControl = new FormControl<number>(0, { nonNullable: true });
 
   constructor() {
     effect(() => {

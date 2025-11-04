@@ -17,11 +17,7 @@ describe('ListItem', () => {
     fixture = TestBed.createComponent(ListItem);
     component = fixture.componentInstance;
 
-    // Set required input
-    const mockLog: LogEntryWithId = {
-      id: 1,
-      ...LOG_DATA[0],
-    };
+    const mockLog: LogEntryWithId = { id: 1, ...LOG_DATA[0] };
     fixture.componentRef.setInput('log', mockLog);
 
     fixture.detectChanges();

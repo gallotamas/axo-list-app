@@ -83,7 +83,7 @@ export class List implements AfterViewInit, OnDestroy {
 
     const heights: ItemWithHeight[] = [];
 
-    const viewportWidth = this.viewportWidth(); // Use signal value
+    const viewportWidth = this.viewportWidth();
     const textWidth = Math.floor(
       viewportWidth -
         HORIZONTAL_PADDING * 2 -
