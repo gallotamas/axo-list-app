@@ -17,6 +17,7 @@ export function _variableSizeVirtualScrollStrategyFactory(
 
 /** A virtual scroll strategy that supports variable-sized items. */
 @Directive({
+  // eslint-disable-next-line @angular-eslint/directive-selector -- This will be used over the cdk-virtual-scroll-viewport component
   selector: 'cdk-virtual-scroll-viewport[variableItemHeights]',
   standalone: true,
   providers: [

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { kebabCase } from 'lodash-es';
 import type { TextStyle } from '@/types';
@@ -23,9 +23,14 @@ const MEASUREMENT_BASE_STYLES: Partial<CSSStyleDeclaration> = {
 })
 export class TextMeasurementService {
   /**
+   * The document object
+   */
+  private document = inject<Document>(DOCUMENT);
+
+  /**
    * Cache of measured character widths by text style
    */
-  private cache: { [key: string]: number } = {};
+  private cache: Record<string, number> = {};
 
   /**
    * Hidden element for measuring text width and height
@@ -36,8 +41,6 @@ export class TextMeasurementService {
    * Flag to indicate whether the measurement element has been initialized
    */
   private initialized = false;
-
-  constructor(@Inject(DOCUMENT) private document: Document) {}
 
   private initialize(): void {
     if (this.initialized) return;
@@ -137,8 +140,8 @@ export class TextMeasurementService {
     width: number,
     style: TextStyle,
     lineHeight: number,
-    verticalPadding: number = 0,
-    borderHeight: number = 0
+    verticalPadding = 0,
+    borderHeight = 0
   ): number {
     const numberOfLines = this.getNumberOfLines(text, width, style);
     return numberOfLines * lineHeight + verticalPadding + borderHeight;
