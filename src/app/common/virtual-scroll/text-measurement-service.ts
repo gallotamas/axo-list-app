@@ -141,7 +141,7 @@ export class TextMeasurementService {
     style: TextStyle,
     lineHeight: number,
     verticalPadding = 0,
-    borderHeight = 0
+    borderHeight = 0,
   ): number {
     const numberOfLines = this.getNumberOfLines(text, width, style);
     return numberOfLines * lineHeight + verticalPadding + borderHeight;

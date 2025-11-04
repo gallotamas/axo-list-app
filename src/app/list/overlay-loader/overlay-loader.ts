@@ -8,7 +8,7 @@ import {
   OnDestroy,
   TemplateRef,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import { Overlay, OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -66,7 +66,7 @@ export class OverlayLoader implements OnDestroy {
           originY: 'center',
           overlayX: 'center',
           overlayY: 'center',
-        }
+        },
       ]);
 
     this.overlayRef = this.overlay.create({

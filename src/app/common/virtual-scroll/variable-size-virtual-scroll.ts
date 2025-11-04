@@ -1,7 +1,10 @@
 import { Directive, forwardRef, Input, OnChanges } from '@angular/core';
 import { coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
 import { VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
-import { VariableSizeVirtualScrollStrategy, ItemWithHeight } from './variable-size-virtual-scroll-strategy';
+import {
+  VariableSizeVirtualScrollStrategy,
+  ItemWithHeight,
+} from './variable-size-virtual-scroll-strategy';
 
 /**
  * Provider factory for `VariableSizeVirtualScrollStrategy` that simply extracts the already created
@@ -10,7 +13,7 @@ import { VariableSizeVirtualScrollStrategy, ItemWithHeight } from './variable-si
  *     `VariableSizeVirtualScrollStrategy` from.
  */
 export function _variableSizeVirtualScrollStrategyFactory(
-  variableSizeDir: VariableSizeVirtualScroll
+  variableSizeDir: VariableSizeVirtualScroll,
 ) {
   return variableSizeDir._scrollStrategy;
 }
@@ -68,14 +71,14 @@ export class VariableSizeVirtualScroll implements OnChanges {
   _scrollStrategy = new VariableSizeVirtualScrollStrategy(
     this.variableItemHeights,
     this.minBufferPx,
-    this.maxBufferPx
+    this.maxBufferPx,
   );
 
   ngOnChanges() {
     this._scrollStrategy.updateItemHeightsAndBufferSize(
       this.variableItemHeights,
       this.minBufferPx,
-      this.maxBufferPx
+      this.maxBufferPx,
     );
   }
 }

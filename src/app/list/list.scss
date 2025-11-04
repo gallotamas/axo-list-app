@@ -1,39 +1,38 @@
 :host {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .scroll-controls {
-    margin-top: 16px;
+  margin-top: 16px;
 }
 
 .list-container {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 88px);
-    width: 100vw;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 88px);
+  width: 100vw;
 }
 
 .list-viewport {
-    height: 100%;
-    width: calc(100% - 32px);
-    margin: 16px;
-    border: 1px solid var(--mat-sys-outline);
-    box-sizing: border-box;
+  height: 100%;
+  width: calc(100% - 32px);
+  margin: 16px;
+  border: 1px solid var(--mat-sys-outline);
+  box-sizing: border-box;
 }
-  
+
 .list-item {
-    min-height: 35px;
-    display: flex;
-    box-sizing: border-box;
-    transition: background-color 0.2s;
-    font-family: Monaco, Consolas, "Courier New", monospace;
-    font-size: 13px;
-    line-height: 18px;
+  min-height: 35px;
+  display: flex;
+  box-sizing: border-box;
+  transition: background-color 0.2s;
+  font-family: Monaco, Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 18px;
 }
 
 .list-item:hover {
-    background-color: var(--mat-sys-secondary-container);
+  background-color: var(--mat-sys-secondary-container);
 }
-

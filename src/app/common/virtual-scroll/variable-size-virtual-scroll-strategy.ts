@@ -60,7 +60,11 @@ export class VariableSizeVirtualScrollStrategy implements VirtualScrollStrategy 
    * @param minBufferPx The minimum amount of buffer (in pixels) before needing to render more
    * @param maxBufferPx The amount of buffer (in pixels) to render when rendering more.
    */
-  updateItemHeightsAndBufferSize(itemHeights: ItemWithHeight[], minBufferPx: number, maxBufferPx: number) {
+  updateItemHeightsAndBufferSize(
+    itemHeights: ItemWithHeight[],
+    minBufferPx: number,
+    maxBufferPx: number,
+  ) {
     if (maxBufferPx < minBufferPx && (typeof ngDevMode === 'undefined' || ngDevMode)) {
       throw Error('CDK virtual scroll: maxBufferPx must be greater than or equal to minBufferPx');
     }
@@ -125,7 +129,7 @@ export class VariableSizeVirtualScrollStrategy implements VirtualScrollStrategy 
     const index = binarySearchIndex(
       this._itemHeights,
       scrollOffset,
-      (item) => item.cumulativeHeight
+      (item) => item.cumulativeHeight,
     );
 
     return index < 0 ? 0 : index;

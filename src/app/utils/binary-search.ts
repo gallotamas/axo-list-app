@@ -13,7 +13,7 @@
 export function binarySearchIndex<T>(
   array: readonly T[],
   targetValue: number,
-  selector: (item: T) => number
+  selector: (item: T) => number,
 ): number {
   const length = array.length;
   if (length === 0) {
