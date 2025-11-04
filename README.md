@@ -1,59 +1,59 @@
 # AxoListApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.7.
+A high-performance Angular application demonstrating how to efficiently render and interact with a list containing **1 million items** with variable content sizes while maintaining optimal performance.
 
-## Development server
+## Overview
 
-To start a local development server, run:
+This project showcases a virtual scrolling technique using Angular CDK to handle extremely large datasets. The implementation focuses on:
 
+- **Variable content sizing**: List items can have different heights
+- **Optimal performance**: Smooth scrolling and rendering even with 1M+ items
+- **Memory efficiency**: Only visible items are rendered in the DOM
+- **Custom virtual scroll strategy**: Implements a custom scrolling strategy to handle variable-sized content
+
+## How It Works
+
+The implementation uses virtual scrolling that only renders the currently visible rows, plus a buffer of rows before and after the visible area. The viewport height is set to the total height of all rows as if they were fully rendered, which automatically adjusts the scrollbar to the appropriate size and ensures the scrollbar position accurately represents the actual position within the list.
+
+This application can handle list items with variable sizes, which is not very common — most virtual scrolling implementations only support fixed-size items (e.g. the angular cdk has an experimental auto size virtual scrolling strategy but that's not ready for production use). To achieve this, the implementation uses a specific constraint on content styling: any text that can wrap into multiple lines must use a monospaced font (the specific font doesn't matter, as long as it's monospaced).
+
+With monospaced fonts, we can calculate the required space for text content without actually rendering it. We only need to measure a single character once to determine its dimensions. Once we have the item heights calculated for all rows, the custom virtual scroll strategy can quickly calculate the precise location of each row, enabling smooth and efficient scrolling through the entire dataset.
+
+## Getting Started
+
+1. Install dependencies:
 ```bash
-ng serve
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+2. Start a local development server:
 ```bash
-ng generate component component-name
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Once the server is running, open your browser and navigate to `http://localhost:4200/`.
 
+## Testing
+Run unit tests with Karma test runner
 ```bash
-ng generate --help
+npm test
 ```
 
-## Building
+## Known Issues
 
-To build the project run:
+### Firefox Compatibility
 
-```bash
-ng build
-```
+Virtual scrolling currently does not work properly in Firefox. The browser displays the scrollbar as if only the already-loaded items are available, making it impossible to scroll through the entire list.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+**Workaround**: Please use Chrome or Safari, both of which have been tested and work correctly.
 
-## Running unit tests
+### Browser Maximum Element Height Limitation
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+There is a fundamental browser limitation on the maximum height of DOM elements, which varies by browser but is typically around **16 million pixels** at the lowest. This constraint affects how many items can be displayed in a virtually scrolled list.
 
-```bash
-ng test
-```
+The number of list elements that can be successfully displayed depends on:
+- The browser being used
+- The viewport size
+- The average height of list items
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+To work around this limitation, a complex modification to the virtual scroll strategy would be required. While there are implementations that attempt to solve this (such as [this approach](https://medium.com/@manju_reddys/rendering-array-of-billion-of-records-at-60-f-s-in-angular-or-vanilla-js-2613e5983a10)), they are not perfect and they might be even more complex for variable row sizes. For example in the referenced implementation the list is sometimes jumpinging thousands of lines during rapid scrolling.
