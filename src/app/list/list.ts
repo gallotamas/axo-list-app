@@ -15,16 +15,32 @@ import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrollin
 import { OverlayScrollbarsDirective, OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import type { PartialOptions } from 'overlayscrollbars';
 import { ItemWithHeight, TextMeasurementService, VariableSizeVirtualScroll } from '@/common';
-import { TextStyle } from '@/types';
 import { ListItem } from './list-item/list-item';
 import { ScrollControls } from './scroll-controls/scroll-controls';
 import { OverlayLoader } from './overlay-loader/overlay-loader';
 import { LOG_DATA, type LogEntryWithId } from '@/data';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { 
+  TEXT_STYLE, 
+  HORIZONTAL_PADDING, 
+  VERTICAL_PADDING, 
+  BORDER, 
+  LINE_HEIGHT, 
+  INDEX_COLUMN_WIDTH, 
+  TIMESTAMP_COLUMN_WIDTH, 
+  GAP 
+} from './common/constants';
 
 @Component({
   selector: 'axo-list',
   templateUrl: './list.html',
+  styles: `
+    .list-item {
+      padding: ${VERTICAL_PADDING}px ${HORIZONTAL_PADDING}px;
+      border-bottom: ${BORDER}px dotted var(--mat-sys-outline);
+      line-height: ${LINE_HEIGHT}px;
+    }
+  `,
   styleUrl: './list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -67,32 +83,18 @@ export class List implements AfterViewInit, OnDestroy {
 
     const heights: ItemWithHeight[] = [];
 
-    // Constants from CSS (they should match the appropriate CSS properties)
-    const textStyle: TextStyle = {
-      fontSize: '13px',
-      fontFamily: 'Monaco, Consolas, "Courier New", monospace',
-      fontWeight: '400'
-    };
     const viewportWidth = this.viewportWidth(); // Use signal value
-    const horizontalPadding = 16 * 2;
-    const verticalPadding = 8 * 2;
-    const border = 1;
-    const lineHeight = 18;
-    const indexColumnWidth = 50;
-    const timestampColumnWidth = 160;
-    const gap = 12 * 2;
-    
-    const textWidth = Math.floor(viewportWidth - horizontalPadding - indexColumnWidth - timestampColumnWidth - gap);
+    const textWidth = Math.floor(viewportWidth - HORIZONTAL_PADDING * 2 - INDEX_COLUMN_WIDTH - TIMESTAMP_COLUMN_WIDTH - GAP * 2);
 
     let cumulativeHeight = 0;
     for (const item of this.items) {
       const numberOfLines = this.textMeasurementService.getNumberOfLines(
         item.message,
         textWidth,
-        textStyle
+        TEXT_STYLE
       );
       
-      const itemHeight = (numberOfLines * lineHeight) + verticalPadding + border;
+      const itemHeight = (numberOfLines * LINE_HEIGHT) + VERTICAL_PADDING * 2 + BORDER;
       cumulativeHeight += itemHeight;
       
       heights.push({

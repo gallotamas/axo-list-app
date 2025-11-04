@@ -1,13 +1,11 @@
 .list-item-container {
   display: flex;
-  gap: 12px;
   width: 100%;
   align-items: flex-start;
 }
 
 .index-column {
   flex-shrink: 0;
-  width: 50px;
   font-weight: 600;
   color: var(--mat-sys-outline);
   text-align: right;
@@ -15,7 +13,6 @@
 
 .timestamp-column {
   flex-shrink: 0;
-  width: 160px;
   color: var(--mat-sys-primary);
   font-size: 11px;
   text-align: right;

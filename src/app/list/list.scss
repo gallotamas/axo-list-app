@@ -13,8 +13,6 @@
     flex-direction: column;
     height: calc(100vh - 88px);
     width: 100vw;
-    gap: 16px;
-    position: relative;
 }
 
 .list-viewport {
@@ -27,8 +25,6 @@
   
 .list-item {
     min-height: 35px;
-    border-bottom: 1px dotted var(--mat-sys-outline);
-    padding: 8px 16px;
     display: flex;
     box-sizing: border-box;
     transition: background-color 0.2s;
