@@ -7,33 +7,55 @@ import {
   ElementRef,
   inject,
   computed,
-  DOCUMENT
+  DOCUMENT,
+  signal,
+  effect
 } from '@angular/core';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { OverlayScrollbarsDirective, OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import type { PartialOptions } from 'overlayscrollbars';
 import { ItemWithHeight, TextMeasurementService, VariableSizeVirtualScroll } from '@/common';
 import { TextStyle } from '@/types';
 import { ListItem } from './list-item/list-item';
+import { ScrollControls } from './scroll-controls/scroll-controls';
+import { OverlayLoader } from './overlay-loader/overlay-loader';
 import { LOG_DATA, type LogEntryWithId } from '@/data';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'axo-list',
   templateUrl: './list.html',
-  styleUrl: './list.css',
+  styleUrl: './list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [VariableSizeVirtualScroll, ScrollingModule, OverlayscrollbarsModule, ListItem],
+  imports: [
+    VariableSizeVirtualScroll, 
+    ScrollingModule, 
+    OverlayscrollbarsModule, 
+    ListItem, 
+    ScrollControls,
+    OverlayLoader
+  ],
 })
 export class List implements AfterViewInit, OnDestroy {
-  @ViewChild('osTarget', { read: ElementRef })
-  private osTargetRef!: ElementRef<HTMLElement>;
+  @ViewChild(CdkVirtualScrollViewport)
+  private viewport!: CdkVirtualScrollViewport;
   
   @ViewChild('osTarget', { read: OverlayScrollbarsDirective })
   private osDirective!: OverlayScrollbarsDirective;
 
-  private textMeasurementService = inject(TextMeasurementService);
+  @ViewChild('osTarget', { read: ElementRef })
+  protected osTargetRef!: ElementRef<HTMLElement>;
 
   private document = inject(DOCUMENT);
+  private textMeasurementService = inject(TextMeasurementService);
+  private resizeSubject$ = new Subject<ResizeObserverEntry>();
+  private resizeObserver?: ResizeObserver;
+  private viewportWidth = signal<number>(800);
+  private destroy$ = new Subject<void>();
+  
+  protected isCalculatingHeights = signal<boolean>(false);
+
+  overlayScrollbarsOptions: PartialOptions;
 
   items: LogEntryWithId[] = Array.from({length: 1000000}).map((_, i) => ({
     id: i,
@@ -51,7 +73,7 @@ export class List implements AfterViewInit, OnDestroy {
       fontFamily: 'Monaco, Consolas, "Courier New", monospace',
       fontWeight: '400'
     };
-    const viewportWidth = 800;
+    const viewportWidth = this.viewportWidth(); // Use signal value
     const horizontalPadding = 16 * 2;
     const verticalPadding = 8 * 2;
     const border = 1;
@@ -85,9 +107,6 @@ export class List implements AfterViewInit, OnDestroy {
     return heights;
   });
 
-
-  overlayScrollbarsOptions: PartialOptions;
-
   constructor() {
     this.overlayScrollbarsOptions = {
       scrollbars: {
@@ -95,6 +114,25 @@ export class List implements AfterViewInit, OnDestroy {
         theme: this.isDarkMode() ? 'os-theme-light' : 'os-theme-dark'
       }
     }
+
+    // Wait for the itemHeights to be calculated before hiding the loader
+    effect(() => {
+      // Access itemHeights to make this effect depend on it
+      this.itemHeights();
+    
+      setTimeout(() => {
+        this.isCalculatingHeights.set(false);
+      }, 0);
+    });
+
+    this.resizeSubject$
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.updateViewportWidth();
+      });
   }
 
   ngAfterViewInit() {
@@ -110,9 +148,27 @@ export class List implements AfterViewInit, OnDestroy {
         }
       });
     }
+
+    this.isCalculatingHeights.set(true);
+    requestAnimationFrame(() => {
+      this.updateViewportWidth();
+    });
+
+    if (targetElm) {
+      const resizeObserver = new ResizeObserver(
+        entries => {
+          this.resizeSubject$.next(entries[0]);
+        }
+      );
+      resizeObserver.observe(targetElm);
+      this.resizeObserver = resizeObserver;
+    }
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.resizeObserver?.disconnect();
     this.osDirective?.osInstance()?.destroy();
   }
 
@@ -120,8 +176,26 @@ export class List implements AfterViewInit, OnDestroy {
     return item.id;
   }
 
+  scrollToRow(rowId: number): void {
+    this.viewport.scrollToIndex(rowId);
+  }
+
   private isDarkMode(): boolean {
     const window = this.document.defaultView;
     return window?.matchMedia('(prefers-color-scheme: dark)').matches ?? false;
+  }
+
+  private updateViewportWidth(): void {
+    const viewportElement = this.viewport.getElementRef().nativeElement;
+    if (viewportElement) {
+      const width = viewportElement.clientWidth;
+      if (width > 0 && width !== this.viewportWidth()) {
+        this.isCalculatingHeights.set(true);
+        
+        requestAnimationFrame(() => {
+          this.viewportWidth.set(width);
+        });
+      }
+    }
   }
 }

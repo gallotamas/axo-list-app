@@ -1,29 +1,31 @@
-<!-- <cdk-virtual-scroll-viewport
-  class="list-viewport"
-  newItemSize="50"
-  overlayScrollbars
-  [options]="overlayScrollbarsOptions"
-  #osTarget
->
-  <div *cdkVirtualFor="let item of items; trackBy: trackById" class="list-item">
-    {{item.text}}
-  </div>
-</cdk-virtual-scroll-viewport> -->
+<axo-scroll-controls
+  class="scroll-controls"
+  [maxRowId]="items.length - 1"
+  (scrollToRowClicked)="scrollToRow($event)"
+/>
 
 <div class="list-container">
+  <axo-overlay-loader
+    [target]="osTargetRef"
+    [isVisible]="isCalculatingHeights()"
+    [message]="'Loading list...'"
+    [spinnerDiameter]="75"
+  />
+
   <cdk-virtual-scroll-viewport
     class="list-viewport"
     [variableItemHeights]="itemHeights()"
-    [minBufferPx]="500"
-    [maxBufferPx]="700"
+    [minBufferPx]="300"
+    [maxBufferPx]="500"
     overlayScrollbars
     [options]="overlayScrollbarsOptions"
     #osTarget
   >
-      <axo-list-item
-        class="list-item"
-        [style.height.px]="itemHeights()[item.id].height"
-        *cdkVirtualFor="let item of items; trackBy: trackById"
-        [log]="item" />
+    <axo-list-item
+      class="list-item"
+      [style.height.px]="itemHeights()[item.id].height"
+      *cdkVirtualFor="let item of items; trackBy: trackById"
+      [log]="item"
+    />
   </cdk-virtual-scroll-viewport>
 </div>

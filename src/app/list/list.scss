@@ -1,14 +1,28 @@
-.list-container {
+:host {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin: 16px;
+}
+
+.scroll-controls {
+    margin-top: 16px;
+}
+
+.list-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 88px);
+    width: 100vw;
+    gap: 16px;
+    position: relative;
 }
 
 .list-viewport {
-    height: 600px;
-    width: 800px;
+    height: 100%;
+    width: calc(100% - 32px);
+    margin: 16px;
     border: 1px solid var(--mat-sys-outline);
+    box-sizing: border-box;
 }
   
 .list-item {
@@ -26,3 +40,4 @@
 .list-item:hover {
     background-color: var(--mat-sys-secondary-container);
 }
+
