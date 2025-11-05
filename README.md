@@ -39,6 +39,10 @@ Run unit tests with Karma test runner
 npm test
 ```
 
+## Theming
+
+The application automatically follows your system settings to switch between light and dark mode. It uses CSS variables from Angular Material to ensure that custom components maintain the same look and feel as Material Design components, creating a consistent user interface throughout the application.
+
 ## Known Issues
 
 ### Firefox Compatibility

@@ -7,11 +7,12 @@ import {
   ElementRef,
   inject,
   computed,
-  DOCUMENT,
   signal,
   effect,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { OverlayScrollbarsDirective, OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import type { PartialOptions } from 'overlayscrollbars';
 import { ItemWithHeight, TextMeasurementService, VariableSizeVirtualScroll } from '@/common';
@@ -19,7 +20,7 @@ import { ListItem } from './list-item/list-item';
 import { ScrollControls } from './scroll-controls/scroll-controls';
 import { OverlayLoader } from './overlay-loader/overlay-loader';
 import { LOG_DATA, type LogEntryWithId } from '@/data';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject, takeUntil, map } from 'rxjs';
 import {
   TEXT_STYLE,
   HORIZONTAL_PADDING,
@@ -62,12 +63,19 @@ export class List implements AfterViewInit, OnDestroy {
   @ViewChild('osTarget', { read: ElementRef })
   protected osTargetRef!: ElementRef<HTMLElement>;
 
-  private document = inject(DOCUMENT);
   private textMeasurementService = inject(TextMeasurementService);
   private resizeSubject$ = new Subject<ResizeObserverEntry>();
   private resizeObserver?: ResizeObserver;
   private viewportWidth = signal<number>(800);
+  private breakpointObserver = inject(BreakpointObserver);
   private destroy$ = new Subject<void>();
+
+  private isDarkMode = toSignal(
+    this.breakpointObserver
+      .observe('(prefers-color-scheme: dark)')
+      .pipe(map((result) => result.matches)),
+    { requireSync: true },
+  );
 
   protected isCalculatingHeights = signal<boolean>(false);
 
@@ -116,12 +124,24 @@ export class List implements AfterViewInit, OnDestroy {
   });
 
   constructor() {
-    this.overlayScrollbarsOptions = {
-      scrollbars: {
-        autoHide: 'scroll',
-        theme: this.isDarkMode() ? 'os-theme-light' : 'os-theme-dark',
-      },
+    const createOverlayScrollbarsOptions: (isDarkMode: boolean) => PartialOptions = (
+      isDarkMode,
+    ) => {
+      return {
+        scrollbars: {
+          autoHide: 'scroll',
+          theme: isDarkMode ? 'os-theme-light' : 'os-theme-dark',
+        },
+      };
     };
+
+    this.overlayScrollbarsOptions = createOverlayScrollbarsOptions(this.isDarkMode());
+
+    // Update scrollbar theme when system theme changes
+    effect(() => {
+      const isDarkMode = this.isDarkMode();
+      this.osDirective?.osInstance()?.options(createOverlayScrollbarsOptions(isDarkMode));
+    });
 
     // Wait for the itemHeights to be calculated before hiding the loader
     effect(() => {
@@ -179,11 +199,6 @@ export class List implements AfterViewInit, OnDestroy {
 
   scrollToRow(rowId: number): void {
     this.viewport.scrollToIndex(rowId);
-  }
-
-  private isDarkMode(): boolean {
-    const window = this.document.defaultView;
-    return window?.matchMedia('(prefers-color-scheme: dark)').matches ?? false;
   }
 
   private updateViewportWidth(): void {
