@@ -10,6 +10,11 @@ This application can handle list items with variable sizes, which is not very co
 
 With monospaced fonts, we can calculate the required space for text content without actually rendering it. We only need to measure a single character once to determine its dimensions. Once we have the item heights calculated for all rows, the custom virtual scroll strategy can quickly calculate (in O(log n) time) the precise location of each row, enabling smooth and efficient scrolling through the entire dataset.
 
+## Requirements
+
+- Node.js (v22, other versions were not tested)
+- Chrome or Safari
+
 ## Getting Started
 
 1. Install dependencies:
